@@ -1,6 +1,6 @@
 # roc-image
 
-A simple image library that supports exporing to (uncompressed) PNG.
+An image library that supports exporting to PNG.
 
 ## Example
 

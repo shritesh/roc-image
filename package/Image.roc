@@ -1,6 +1,6 @@
 ## # Image
 ## 
-## A simple Image package that supports exporting to uncompressed PNG.
+## A simple image package that supports exporting to uncompressed PNG.
 ## 
 ## ## Example
 ## To create a simple 3-pixel image with red, green and blue colors:
