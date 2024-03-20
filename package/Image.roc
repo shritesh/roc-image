@@ -1,11 +1,11 @@
 ## # Image
-## 
+##
 ## A simple image package that supports exporting to uncompressed PNG.
-## 
+##
 ## ## Example
 ## To create a simple 3-pixel image with red, green and blue colors:
 ## ```
-## Image.new 3 1 
+## Image.new 3 1
 ## |> Result.try \image -> Image.set image 0 0 (255, 0, 0, 255)
 ## |> Result.try \image -> Image.set image 0 1 (0, 255, 0, 255)
 ## |> Result.try \image -> Image.set image 0 2 (0, 0, 255, 255)
@@ -14,7 +14,6 @@
 interface Image
     exposes [Image, Pixel, new, get, set, toPNG]
     imports []
-
 
 ## A pixel is a `(U8, U8, U8, U8)` tuple of red, green, blue and alpha color values.
 Pixel : (U8, U8, U8, U8)
@@ -43,7 +42,6 @@ get : Image, U32, U32 -> Result Pixel [OutOfBounds]
 get = \@Image img, x, y ->
     row <- List.get img.pixels (Num.intCast y) |> Result.try
     List.get row (Num.intCast x)
-
 
 ## Sets the `pixel` value at the `x` and `y` coordinates.
 ##
@@ -79,10 +77,10 @@ toPNG = \@Image img ->
     imageData =
         List.mapWithIndex img.pixels \row, idx ->
             row
-            |> List.joinMap \(r, g, b, a) -> [r, g, b, a] # add a null byte between rows
-            |> List.concat (if Num.intCast (idx + 1) == img.height then [] else [0])
-        |> List.join # no compression dictionary here
-        |> List.prepend 0
+            |> List.joinMap \(r, g, b, a) -> [r, g, b, a] 
+            |> List.concat (if Num.intCast (idx + 1) == img.height then [] else [0]) # add a null byte between rows
+        |> List.join 
+        |> List.prepend 0 # no compression dictionary here
 
     blocks =
         List.chunksOf imageData (Num.intCast Num.maxU16)
@@ -91,8 +89,8 @@ toPNG = \@Image img ->
         block, idx <- List.mapWithIndex blocks
         List.len block
         |> Num.intCast
-        |> toU8BothEndian # whether there are more blocks remaining
-        |> List.prepend (if idx + 1 == List.len blocks then 1 else 0)
+        |> toU8BothEndian 
+        |> List.prepend (if idx + 1 == List.len blocks then 1 else 0) # whether there are more blocks remaining
         |> List.concat block
 
     data =

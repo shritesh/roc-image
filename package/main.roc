@@ -1,3 +1,3 @@
-package "Image" 
+package "Image"
     exposes [Image]
     packages {}
