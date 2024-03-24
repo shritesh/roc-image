@@ -58,7 +58,7 @@ pairs = \items ->
             (final, acc) = List.walk rest (first, []) \(last, list), elem -> (elem, List.append list (last, elem))
             List.append acc (final, first)
 
-# Only inserts the left and right most point for each scanline y
+# Only keep the biggest and smallest x for each y
 insert = \scanlines, (x, y) ->
     newVal =
         when Dict.get scanlines y is
@@ -114,8 +114,8 @@ toImage = \Graphics width height polygons ->
     init <- Image.new imgWidth imgHeight |> Result.try
 
     image, (Polygon (r, g, b) points) <- List.walkTry polygons init
-    outline = pairs points |> List.walk (Dict.empty {}) scanline
-    img, (y, x) <- outline |> Dict.toList |> List.walkTry image
+    scanlines = pairs points |> List.walk (Dict.empty {}) scanline
+    img, (y, x) <- scanlines |> Dict.toList |> List.walkTry image
 
     when x is
         One one -> Image.set img one y (r, g, b, 255)
